@@ -1,0 +1,6 @@
+# NOTE: Temporary. This will be replaced by a makefile in the future, but atm I can't be arsed.
+
+# clang glad/src/glad.c -c -o glad.o -Iglad/include -O3 # uncomment to compile the glad source from glad.dav1d.de to an object file
+clang -shared -fPIC -o libgame.so game/main.c -Wall -Wextra -pedantic -O3 -std=c99
+clang src/*.c glad.o -o engine -Wall -Wextra -pedantic -Iglad/include -L. -lglfw -lgame -O3 -Wl,-rpath='$ORIGIN' -std=c99
+./engine
