@@ -4,14 +4,13 @@
 #include "../src/engine.h"
 
 void ready(void) {
-    // yay I can read files. Such fun.
-    const char *contents = engine_read_file("src/engine.c");
-    printf("%s\n", contents);
-    free((void *)contents);
+    printf("Window width: %d\n", window_width());
+    printf("Window height: %d\n", window_height());
+    printf("Window title: %s\n", window_title());
 }
 
 void update(void) {
-    printf("%f, %f\n", window_mouse_accel().x, window_mouse_accel().y);
+    // printf("%f, %f\n", window_mouse_accel().x, window_mouse_accel().y);
 }
 
 void terminate(void) {

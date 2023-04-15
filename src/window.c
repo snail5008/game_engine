@@ -128,3 +128,14 @@ Vec2f32 window_mouse_accel(void) {
     return window.mouse_accel;
 }
 
+uint32_t window_width(void) {
+    return window.width;
+}
+
+uint32_t window_height(void) {
+    return window.height;
+}
+
+const char *window_title(void) {
+    return window.title;
+}
