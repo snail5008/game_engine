@@ -15,3 +15,6 @@ Vec2f32 window_mouse_accel(void);
 uint32_t window_width(void);
 uint32_t window_height(void);
 const char *window_title(void);
+void window_set_width(uint32_t width);
+void window_set_height(uint32_t height);
+void window_set_title(const char *title);

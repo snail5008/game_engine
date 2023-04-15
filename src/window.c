@@ -139,3 +139,18 @@ uint32_t window_height(void) {
 const char *window_title(void) {
     return window.title;
 }
+
+void window_set_width(uint32_t width) {
+    window.width = width;
+    glfwSetWindowSize(window.window, window.height, window.width);
+}
+
+void window_set_height(uint32_t height) {
+    window.height = height;
+    glfwSetWindowSize(window.window, window.height, window.width);
+}
+
+void window_set_title(const char *title) {
+    window.title = title;
+    glfwSetWindowTitle(window.window, window.title);
+}
