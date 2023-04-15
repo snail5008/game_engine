@@ -3,7 +3,15 @@
 #include <stdint.h>
 #include <stdio.h>
 
-char *engine_read_file(const char *filename) {
+void engine_capacityfunc_add(uint32_t *capacity) {
+    *capacity = *capacity + ENGINE_CAPACITY_ADD_BLOCK_SIZE;
+}
+
+void engine_capacityfunc_double(uint32_t *capacity) {
+    *capacity = *capacity * 2;
+}
+
+char *engine_read_file_custom_capacity_increase(const char *filename, custom_fileread_capacity_t capacityfunc) {
     FILE *file = fopen(filename, "r");
     if (!file) {
         fprintf(stderr, "Error: could not read file\n");
@@ -21,7 +29,7 @@ char *engine_read_file(const char *filename) {
 
     while ((c = getc(file)) != EOF) {
         if (length >= capacity - 1) {
-            capacity += 100;
+            capacityfunc(&capacity);
             contents = realloc(contents, capacity * sizeof *contents);
             if (!contents) {
                 fprintf(stderr, "Error: allocation error\n");
@@ -35,4 +43,8 @@ char *engine_read_file(const char *filename) {
     fclose(file);
     
     return contents;
+}
+
+char *engine_read_file(const char *filename) {
+    return engine_read_file_custom_capacity_increase(filename, engine_capacityfunc_add);
 }

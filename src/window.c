@@ -17,6 +17,7 @@ typedef struct {
         float g;
         float b;
     } bg_colour;
+    Vec2i32 mouse_position;
 } Window;
 
 static Window window = {
@@ -27,6 +28,12 @@ static Window window = {
         .b = 0.2,
     }
 };
+
+void glfw_mousepos_callback(GLFWwindow *glfw_window, double x, double y) {
+    (void)glfw_window;
+    window.mouse_position.x = x;
+    window.mouse_position.y = y;
+}
 
 void window_create(uint32_t width, uint32_t height, const char *title) {
     if (window.initialised) {
@@ -61,6 +68,7 @@ void window_create(uint32_t width, uint32_t height, const char *title) {
     }
 
     glfwSwapInterval(1);
+    glfwSetCursorPosCallback(window.window, glfw_mousepos_callback);
 
     window.initialised = true;
 }
@@ -95,4 +103,15 @@ void window_background_colour(float r, float g, float b) {
     window.bg_colour.r = r;
     window.bg_colour.g = g;
     window.bg_colour.b = b;
+}
+
+Vec2i32 window_mouse_position(void) {
+    return window.mouse_position;
+}
+
+Vec2f32 window_mouse_position_normalised(void) {
+    Vec2f32 vec;
+    vec.x = window.mouse_position.x / (float)window.width;
+    vec.y = window.mouse_position.y / (float)window.height;
+    return vec;
 }

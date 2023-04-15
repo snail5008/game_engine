@@ -11,7 +11,7 @@ void ready(void) {
 }
 
 void update(void) {
-
+    printf("%f, %f\n", window_mouse_position_normalised().x, window_mouse_position_normalised().y);
 }
 
 void terminate(void) {
