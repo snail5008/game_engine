@@ -12,8 +12,9 @@ Some features that ideally I would like to implement (tick off as completed, not
     * [X] ~~*also implement a function that gives the results between 0 and 1 (aka vec_div(mouse_pos, (vec2){800, 600}) or whatever the syntax will be)*~~ [2023-04-15]
     * [X] ~~*allow the user to request the acceleration of the mouse between two frames. This will naturally be framrate dependant though, so while testing, *make sure that applications function correctly on lower & higher framerates*!*~~ [2023-04-15]
     * [ ] implement mouse button handling, return a uint32_t (32 buttons may be overkill, but why not? I guess they will also just be more efficient on most platforms than using a uint8_t and have the added benefit of being scalable past 8 buttons) that can be or'd with some #defined constants (or real constants I guess) such as MOUSE_LEFT, MOUSE_RIGHT, MOUSE_MIDDLE, etc.
+    * [ ] implement mouse scroll wheel input
     * [ ] implement keyboard inputs
-    * [ ] functions to change window width, height, and title
+    * [X] ~~*functions to change window width, height, and title*~~ [2023-04-15]
     * [X] ~~*functions to get window width, height, and title*~~ [2023-04-15]
 
 * [ ] vector library
@@ -22,10 +23,10 @@ Some features that ideally I would like to implement (tick off as completed, not
     * [ ] function for getting the magnitude of a vector
     * [ ] normalising vectors (this just means making the magnitude of a vector 1 while keeping its direction the same). This involves sqrts, so there may be more efficient algorithms to look into? It doesn't really matter though, premature optimisation = bad
 
-* [ ] mesh struct
+* [ ] mesh module
     * [ ] 
 
-* [ ] UI library (to make into a )
+* [ ] UI library (in the future, use this to create an interface for the engine itself)
     * [ ] text rendering
     * [ ] buttons
     * [ ] text boxes

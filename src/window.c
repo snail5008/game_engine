@@ -19,6 +19,7 @@ typedef struct {
     } bg_colour;
     Vec2i32 mouse_position;
     Vec2f32 mouse_accel;
+    mouse_buttons_t mouse_buttons;
 } Window;
 
 static Window window = {
@@ -36,6 +37,30 @@ void glfw_mousepos_callback(GLFWwindow *glfw_window, double x, double y) {
     window.mouse_accel.y = y / window.height - window_mouse_position_normalised().y;
     window.mouse_position.x = x;
     window.mouse_position.y = y;
+}
+
+void glfw_mousebutton_callback(GLFWwindow *glfw_window, int button, int action, int mods) {
+    (void)glfw_window;
+    (void)mods;
+    if (button == GLFW_MOUSE_BUTTON_LEFT) {
+        if (action == GLFW_PRESS) {
+            window.mouse_buttons |= MOUSE_BUTTON_LEFT;
+        } else if (action == GLFW_RELEASE) {
+            window.mouse_buttons &= ~MOUSE_BUTTON_LEFT;
+        }
+    } else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+        if (action == GLFW_PRESS) {
+            window.mouse_buttons |= MOUSE_BUTTON_RIGHT;
+        } else if (action == GLFW_RELEASE) {
+            window.mouse_buttons &= ~MOUSE_BUTTON_RIGHT;
+        }
+    } else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
+        if (action == GLFW_PRESS) {
+            window.mouse_buttons |= MOUSE_BUTTON_MIDDLE;
+        } else if (action == GLFW_RELEASE) {
+            window.mouse_buttons &= ~MOUSE_BUTTON_MIDDLE;
+        }
+    }
 }
 
 void window_create(uint32_t width, uint32_t height, const char *title) {
@@ -72,6 +97,7 @@ void window_create(uint32_t width, uint32_t height, const char *title) {
 
     glfwSwapInterval(1);
     glfwSetCursorPosCallback(window.window, glfw_mousepos_callback);
+    glfwSetMouseButtonCallback(window.window, glfw_mousebutton_callback);
 
     window.mouse_position.x = 0;
     window.mouse_position.y = 0;
@@ -153,4 +179,8 @@ void window_set_height(uint32_t height) {
 void window_set_title(const char *title) {
     window.title = title;
     glfwSetWindowTitle(window.window, window.title);
+}
+
+mouse_buttons_t window_mouse_buttons(void) {
+    return window.mouse_buttons;
 }

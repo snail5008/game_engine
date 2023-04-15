@@ -13,7 +13,7 @@ void ready(void) {
 }
 
 void update(void) {
-    // printf("%f, %f\n", window_mouse_accel().x, window_mouse_accel().y);
+    printf("%d\n", window_mouse_buttons());
 }
 
 void terminate(void) {

@@ -3,6 +3,11 @@
 #include <stdbool.h>
 #include "vector.h"
 
+typedef uint32_t mouse_buttons_t;
+#define MOUSE_BUTTON_LEFT 1
+#define MOUSE_BUTTON_RIGHT 2
+#define MOUSE_BUTTON_MIDDLE 4
+
 void window_create(uint32_t width, uint32_t height, const char *title);
 void window_destroy(void);
 bool window_open(void);
@@ -18,3 +23,4 @@ const char *window_title(void);
 void window_set_width(uint32_t width);
 void window_set_height(uint32_t height);
 void window_set_title(const char *title);
+mouse_buttons_t window_mouse_buttons(void);
