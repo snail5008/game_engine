@@ -18,6 +18,7 @@ typedef struct {
         float b;
     } bg_colour;
     Vec2i32 mouse_position;
+    Vec2f32 mouse_accel;
 } Window;
 
 static Window window = {
@@ -31,6 +32,8 @@ static Window window = {
 
 void glfw_mousepos_callback(GLFWwindow *glfw_window, double x, double y) {
     (void)glfw_window;
+    window.mouse_accel.x = x / window.width - window_mouse_position_normalised().x;
+    window.mouse_accel.y = y / window.height - window_mouse_position_normalised().y;
     window.mouse_position.x = x;
     window.mouse_position.y = y;
 }
@@ -70,6 +73,9 @@ void window_create(uint32_t width, uint32_t height, const char *title) {
     glfwSwapInterval(1);
     glfwSetCursorPosCallback(window.window, glfw_mousepos_callback);
 
+    window.mouse_position.x = 0;
+    window.mouse_position.y = 0;
+
     window.initialised = true;
 }
 
@@ -95,6 +101,8 @@ void window_frame_begin(void) {
 }
 
 void window_frame_end(void) {
+    window.mouse_accel.x = 0;
+    window.mouse_accel.y = 0;
     glfwSwapBuffers(window.window);
     glfwPollEvents();
 }
@@ -111,7 +119,12 @@ Vec2i32 window_mouse_position(void) {
 
 Vec2f32 window_mouse_position_normalised(void) {
     Vec2f32 vec;
-    vec.x = window.mouse_position.x / (float)window.width;
-    vec.y = window.mouse_position.y / (float)window.height;
+    vec.x = window_mouse_position().x / (float)window.width;
+    vec.y = window_mouse_position().y / (float)window.height;
     return vec;
 }
+
+Vec2f32 window_mouse_accel(void) {
+    return window.mouse_accel;
+}
+
