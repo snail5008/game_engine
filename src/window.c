@@ -20,6 +20,7 @@ typedef struct {
     Vec2i32 mouse_position;
     Vec2f32 mouse_accel;
     mouse_buttons_t mouse_buttons;
+    float mouse_wheel;
 } Window;
 
 static Window window = {
@@ -63,6 +64,12 @@ void glfw_mousebutton_callback(GLFWwindow *glfw_window, int button, int action, 
     }
 }
 
+void glfw_scrollwheel_callback(GLFWwindow *glfw_window, double x_offset, double y_offset) {
+    (void)glfw_window;
+    (void)x_offset;
+    window.mouse_wheel = y_offset;
+}
+
 void window_create(uint32_t width, uint32_t height, const char *title) {
     if (window.initialised) {
         fprintf(stderr, "Error: attempted window initialisation multiple times\n");
@@ -98,9 +105,11 @@ void window_create(uint32_t width, uint32_t height, const char *title) {
     glfwSwapInterval(1);
     glfwSetCursorPosCallback(window.window, glfw_mousepos_callback);
     glfwSetMouseButtonCallback(window.window, glfw_mousebutton_callback);
+    glfwSetScrollCallback(window.window, glfw_scrollwheel_callback);
 
     window.mouse_position.x = 0;
     window.mouse_position.y = 0;
+    window.mouse_wheel = 0;
 
     window.initialised = true;
 }
@@ -127,6 +136,7 @@ void window_frame_begin(void) {
 }
 
 void window_frame_end(void) {
+    window.mouse_wheel = 0;
     window.mouse_accel.x = 0;
     window.mouse_accel.y = 0;
     glfwSwapBuffers(window.window);
@@ -183,4 +193,8 @@ void window_set_title(const char *title) {
 
 mouse_buttons_t window_mouse_buttons(void) {
     return window.mouse_buttons;
+}
+
+float window_scroll_wheel_direction(void) {
+    return window.mouse_wheel;
 }

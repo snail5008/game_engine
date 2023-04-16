@@ -13,7 +13,7 @@ void ready(void) {
 }
 
 void update(void) {
-    printf("%d\n", window_mouse_buttons());
+    printf("%f\n", window_scroll_wheel_direction());
 }
 
 void terminate(void) {
