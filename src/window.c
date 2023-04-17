@@ -40,6 +40,12 @@ void glfw_mousepos_callback(GLFWwindow *glfw_window, double x, double y) {
     window.mouse_position.y = y;
 }
 
+void glfw_windowsize_callback(GLFWwindow *glfw_window, int width, int height) {
+    (void)glfw_window;
+    while ((uint32_t)(glfwGetTime() * 10000) % 100 != 0) {}
+    glViewport(0, 0, width, height);
+}
+
 void glfw_mousebutton_callback(GLFWwindow *glfw_window, int button, int action, int mods) {
     (void)glfw_window;
     (void)mods;
@@ -106,6 +112,7 @@ void window_create(uint32_t width, uint32_t height, const char *title) {
     glfwSetCursorPosCallback(window.window, glfw_mousepos_callback);
     glfwSetMouseButtonCallback(window.window, glfw_mousebutton_callback);
     glfwSetScrollCallback(window.window, glfw_scrollwheel_callback);
+    glfwSetWindowSizeCallback(window.window, glfw_windowsize_callback);
 
     window.mouse_position.x = 0;
     window.mouse_position.y = 0;
@@ -178,12 +185,12 @@ const char *window_title(void) {
 
 void window_set_width(uint32_t width) {
     window.width = width;
-    glfwSetWindowSize(window.window, window.height, window.width);
+    glfwSetWindowSize(window.window, window.width, window.height);
 }
 
 void window_set_height(uint32_t height) {
     window.height = height;
-    glfwSetWindowSize(window.window, window.height, window.width);
+    glfwSetWindowSize(window.window, window.width, window.height);
 }
 
 void window_set_title(const char *title) {

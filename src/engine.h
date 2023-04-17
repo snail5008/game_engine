@@ -1,3 +1,4 @@
+#pragma once
 #include <stdint.h>
 
 #if !defined(ENGINE_CAPACITY_ADD_BLOCK_SIZE)
@@ -10,3 +11,4 @@ void engine_capacityfunc_add(uint32_t *capacity);
 void engine_capacityfunc_double(uint32_t *capacity);
 char *engine_read_file_custom_capacity_increase(const char *filename, custom_fileread_capacity_t capacityfunc);
 char *engine_read_file(const char *filename);
+uint32_t engine_sum_u32(uint32_t *vector, uint32_t vector_element_count);

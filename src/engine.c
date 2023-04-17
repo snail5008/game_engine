@@ -48,3 +48,11 @@ char *engine_read_file_custom_capacity_increase(const char *filename, custom_fil
 char *engine_read_file(const char *filename) {
     return engine_read_file_custom_capacity_increase(filename, engine_capacityfunc_add);
 }
+
+uint32_t engine_sum_u32(uint32_t *vector, uint32_t vector_element_count) {
+    uint32_t result = 0;
+    for (uint32_t i = 0; i < vector_element_count; i++) {
+        result += vector[i];
+    }
+    return result;
+}

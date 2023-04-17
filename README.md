@@ -31,7 +31,18 @@ Some features that ideally I would like to implement (tick off as completed, not
     * [ ] normalising vectors (this just means making the magnitude of a vector 1 while keeping its direction the same). This involves sqrts, so there may be more efficient algorithms to look into? It doesn't really matter though, premature optimisation = bad
 
 * [ ] mesh module
-    * [ ] 
+    <!-- * [ ] a module for creating vertices, that has the layout type encoded in it
+        * [ ] 2D vertices (only position)
+        * [ ] 3D vertices (only position) -->
+    * [X] ~~*a mesh struct with a vao, vbo, and program (and in the future ebo)*~~ [2023-04-17]
+    * [ ] function to remake/reload program
+    * [ ] allow user to reload program with different shaders
+    * [ ] indices support
+
+* [ ] camera module
+    * [ ] ability to select between different projection options
+        * [ ] persepctive projection
+        * [ ] orthographic projection
 
 * [ ] UI library (in the future, use this to create an interface for the engine itself)
     * [ ] text rendering

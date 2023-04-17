@@ -1,5 +1,7 @@
-layout (location = 0) in vec3 aPos;
+#version 330 core
+out vec4 frag_colour;
+in vec3 vertex_colour;
 
 void main() {
-    gl_Position = vec4(aPos);
+    frag_colour = vec4(vertex_colour, 1.0);
 }
