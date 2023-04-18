@@ -14,7 +14,7 @@ void engine_capacityfunc_double(uint32_t *capacity) {
 char *engine_read_file_custom_capacity_increase(const char *filename, custom_fileread_capacity_t capacityfunc) {
     FILE *file = fopen(filename, "r");
     if (!file) {
-        fprintf(stderr, "Error: could not read file\n");
+        fprintf(stderr, "Error: could not read file `%s'\n", filename);
         exit(1);
     }
 
@@ -49,7 +49,7 @@ char *engine_read_file(const char *filename) {
     return engine_read_file_custom_capacity_increase(filename, engine_capacityfunc_add);
 }
 
-uint32_t engine_sum_u32(uint32_t *vector, uint32_t vector_element_count) {
+uint32_t engine_sum_u32(const uint32_t *vector, uint32_t vector_element_count) {
     uint32_t result = 0;
     for (uint32_t i = 0; i < vector_element_count; i++) {
         result += vector[i];

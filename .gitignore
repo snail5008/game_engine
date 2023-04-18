@@ -6,3 +6,5 @@ glad.o
 engine
 libgame.so
 .vscode
+game/rust/target
+game/rust/Cargo.lock

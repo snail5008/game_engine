@@ -7,7 +7,7 @@
 // void renderer_delete_vertices(void *vertex_data);
 // void renderer_push_vertex(void *vertex_data, void *vertex);
 
-void *renderer_mesh_create(float *vertices, uint32_t vertex_count, uint32_t layout_location_count, uint32_t vertex_layout[32], const char *vertex_shader_path, char *fragment_shader_path);
+void *renderer_mesh_create(const float *vertices, uint32_t vertex_count, uint32_t layout_location_count, const uint32_t vertex_layout[32], const char *vertex_shader_path, char *fragment_shader_path);
 void renderer_mesh_destroy(void *mesh);
 void renderer_mesh_draw(void *mesh);
 

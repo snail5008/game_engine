@@ -1,6 +1,12 @@
-# NOTE: Temporary. This will be replaced by a makefile in the future, but atm I can't be arsed.
+#!/bin/bash
+
+# NOTE: Temporary. This will be replaced by a makefile in the future.
 
 # clang glad/src/glad.c -c -o glad.o -Iglad/include -O3 # uncomment to compile the glad source from glad.dav1d.de to an object file
-clang -std=c11 -shared -fPIC -o libgame.so game/main.c -Wall -Wextra -O3 -std=c99
+
+### different game languages ###
+# clang -std=c11 -shared -fPIC -o libgame.so game/C/main.c -Wall -Wextra -O3 -std=c99
+(cd game/rust && cargo build && cp target/debug/librust.so ../../libgame.so)
+
 clang -std=c11 src/*.c glad.o -o engine -Wall -Wextra -Iglad/include -L. -lglfw -lgame -O3 -Wl,-rpath='$ORIGIN'
 ./engine

@@ -19,7 +19,6 @@ void ready(void) {
     printf("Window title: %s\n", window_title());
 
     mesh = renderer_mesh_create(triangle, 3, 3, (uint32_t[]) {2, 3, 1}, "shaders/default.vert", "shaders/default.frag");
-
 }
 
 void update(void) {

@@ -44,6 +44,10 @@ Some features that ideally I would like to implement (tick off as completed, not
         * [ ] persepctive projection
         * [ ] orthographic projection
 
+* [ ] archetype-based ECS library
+    * [ ] method of creating new components
+    * [ ] deleting entities
+
 * [ ] UI library (in the future, use this to create an interface for the engine itself)
     * [ ] text rendering
     * [ ] buttons

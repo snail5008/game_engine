@@ -41,7 +41,7 @@ typedef struct {
     uint32_t vertex_count;
 } Mesh;
 
-void *renderer_mesh_create(float *vertices, uint32_t vertex_count, uint32_t layout_location_count, uint32_t vertex_layout[32], const char *vertex_shader_path, char *fragment_shader_path) {
+void *renderer_mesh_create(const float *vertices, uint32_t vertex_count, uint32_t layout_location_count, const uint32_t vertex_layout[32], const char *vertex_shader_path, char *fragment_shader_path) {
     uint32_t vertices_size = sizeof(float);
     vertices_size *= engine_sum_u32(vertex_layout, layout_location_count);
     vertices_size *= vertex_count;
