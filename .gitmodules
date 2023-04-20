@@ -1,3 +1,0 @@
-[submodule "brainfuck_interpreter"]
-	path = brainfuck_interpreter
-	url = git@github.com:snail5008/brainfuck_interpreter.git
