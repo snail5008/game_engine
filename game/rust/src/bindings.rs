@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 pub mod engine {
     extern "C" {
         fn engine_read_file(filename: *const u8) -> *mut u8;
@@ -35,15 +37,17 @@ pub mod window {
 pub mod mesh {
     use std::ffi::c_void;
     use crate::bindings::engine;
+    use crate::matrices::Matrix4x4;
 
     extern "C" {
         fn renderer_mesh_create(vertices: *const f32, vertex_count: u32, layout_location_count: u32, vertex_layout: *const u32, vertex_shader_path: *const u8, fragment_shader_path: *const u8) -> *mut c_void;
         fn renderer_mesh_destroy(mesh: *mut c_void);
-        fn renderer_mesh_draw(mesh: *mut c_void);
+        fn renderer_mesh_draw(mesh: *mut c_void, model: *const f32);
     }
 
     pub struct Mesh {
-        mesh: *mut c_void
+        mesh: *mut c_void,
+        model: Matrix4x4
     }
 
     impl Mesh {
@@ -53,14 +57,18 @@ pub mod mesh {
             vertex_shader_path.push('\0');
             fragment_shader_path.push('\0');
             Mesh {
-                mesh: unsafe { renderer_mesh_create(vertices.as_ptr(), vertices.len() as u32 / engine::sum_u32(&vertex_layout), vertex_layout.len() as u32, vertex_layout.as_ptr(), vertex_shader_path.as_ptr(), fragment_shader_path.as_ptr()) }
+                mesh: unsafe { renderer_mesh_create(vertices.as_ptr(), vertices.len() as u32 / engine::sum_u32(&vertex_layout), vertex_layout.len() as u32, vertex_layout.as_ptr(), vertex_shader_path.as_ptr(), fragment_shader_path.as_ptr()) },
+                model: Matrix4x4::identity(),
             }
         }
         pub fn delete(&self) {
             unsafe { renderer_mesh_destroy(self.mesh); }
         }
         pub fn draw(&self) {
-            unsafe { renderer_mesh_draw(self.mesh); }
+            unsafe { renderer_mesh_draw(self.mesh, self.model.as_ptr()); }
+        }
+        pub fn model(&mut self) -> &mut Matrix4x4 {
+            &mut self.model
         }
     }
 }

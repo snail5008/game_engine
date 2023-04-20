@@ -104,12 +104,21 @@ void renderer_mesh_destroy(void *mesh) {
     free(mesh);
 }
 
-void renderer_mesh_draw(void *mesh) {
+void renderer_mesh_draw(void *mesh, float *model) {
+    if (model != NULL) {
+        renderer_update_model_matrix(mesh, model);
+    }
+
     glBindVertexArray(to_mesh(mesh)->vao);
     glBindBuffer(GL_ARRAY_BUFFER, to_mesh(mesh)->vbo);
     glUseProgram(to_mesh(mesh)->prog);
     glDrawArrays(GL_TRIANGLES, 0, to_mesh(mesh)->vertex_count);
 }
+void renderer_update_model_matrix(void *mesh, float *matrix) {
+    glUseProgram(to_mesh(mesh)->prog);
+    glUniformMatrix4fv(glGetUniformLocation(to_mesh(mesh)->prog, "model"), 1, GL_FALSE, matrix);
+}
+
 
 uint32_t renderer_mesh_get_vao(void *mesh) {
     return to_mesh(mesh)->vao;
