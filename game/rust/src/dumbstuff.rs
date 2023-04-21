@@ -1,10 +1,3 @@
-
-// For functions:
-//                            (in hex, little endian)
-//                            20 03 00 00 58 02 00 00 .... 
-//      Function in memory:   800 600 hello!\0 window_create%0000 0400 0800%
-//      to call the function, have the current cell be the value with the 'w' in window_create
-
 pub mod brainfuck {
     pub struct State {
         current_cell: usize,
@@ -12,7 +5,7 @@ pub mod brainfuck {
         cells: Vec<u8>,
         program: &'static str,
         opening_brackets: Vec<usize>,
-        function_table: Vec<(&'static str, fn())>
+        function_table: Vec<(&'static str, fn(state: &State, arguments: *const u8))>
     }
 
     impl State {
@@ -75,7 +68,26 @@ pub mod brainfuck {
                 function_name.push(self.cells[i] as char);
                 i += 1;
             }
+            i += 1;
             println!("{}", function_name);
+            let mut args: Vec<u8> = vec![];
+            while self.cells[i] != '%' as u8 {
+                args.push(self.cells[i] as u8);
+                i += 1;
+            }
+            let args_ptr = args[..].as_ptr();
+
+            for i in 0..self.function_table.len() {
+                if self.function_table[i].0 == function_name {
+                    self.function_table[i].1(self, args_ptr);
+                    break;
+                } else {
+                    println!("Undefined function {}", function_name);
+                }
+            }
+        }
+        pub fn register_function(&mut self, name: &'static str, ptr: fn(state: &State, arguments: *const u8)) {
+            self.function_table.push((name, ptr));
         }
         pub fn cell_count(&self) -> usize {
             self.cells.len()
@@ -93,6 +105,34 @@ pub mod brainfuck {
                 _   => {}
             }
             self.next_progchar();
+        }
+
+        pub fn arguments(args: *const u8, argcount: usize) -> Vec<u32> {
+            let mut retval: Vec<u32> = vec![];
+            for i in 0..argcount {
+                let idx: usize = unsafe { *(args.add(i * 4) as *const u32) } as usize;
+                retval.push(idx as u32);
+            }
+            retval
+        }
+
+        pub fn u32_from_idx(&self, index: usize) -> u32 {
+            let mut retval: u32 = 0;
+            unsafe { *(&mut retval as *mut u32 as *mut u8) = self.get_cell(index); }
+            unsafe { *(&mut retval as *mut u32 as *mut u8).add(1) = self.get_cell(index + 1); }
+            unsafe { *(&mut retval as *mut u32 as *mut u8).add(2) = self.get_cell(index + 2); }
+            unsafe { *(&mut retval as *mut u32 as *mut u8).add(3) = self.get_cell(index + 3); }
+            retval
+        }
+
+        pub fn get_string(&self, index: usize) -> String {
+            let mut string = String::from("");
+            let mut i = index;
+            while self.get_cell(i) != '%' as u8 {
+                string.push(self.get_cell(i) as char);
+                i += 1
+            }
+            string
         }
     }
 }

@@ -5,9 +5,9 @@
 int game_main(void);
 
 int main(void) {
-    window_create(800, 600, "Game");
+    // window_create(800, 600, "Game");
     game_main();
     printf("Application exited with OpenGL error 0x%x\n", glGetError());
-    window_destroy();
+    // window_destroy();
     return 0;
 }

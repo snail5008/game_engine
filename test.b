@@ -18,20 +18,9 @@ Window creation
 >>>>
 ~&+8
 >>>>
+~%
 
-Window destruction
-~window_destroy%
-
-Window isopen check
-~window_open%
-
-At the start of the game loop
-~window_frame_begin%
-
-At the end of the game loop
-~window_frame_end%
-
-~&<102
+~&<40
 ~&>13
 
 %

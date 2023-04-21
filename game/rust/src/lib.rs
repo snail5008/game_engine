@@ -5,10 +5,24 @@ use bindings::{window, mesh::Mesh};
 mod matrices;
 mod dumbstuff;
 
+extern "C" {
+    pub fn window_create(width: u32, height: u32, title: *const u8) -> *const std::ffi::c_void;
+}
+
+fn window_create_bf(s: &dumbstuff::brainfuck::State, args: *const u8) {
+    let arguments = dumbstuff::brainfuck::State::arguments(args, 3);
+    let width: u32 = s.u32_from_idx(arguments[0] as usize);
+    let height: u32 = s.u32_from_idx(arguments[1] as usize);
+    let mut title: String = s.get_string(arguments[2] as usize);
+    title.push('\0');
+    unsafe { window_create(width, height, title.as_ptr()); }
+}
+
 #[no_mangle]
 extern "C" fn game_main() {
 
     let mut state = dumbstuff::brainfuck::State::new("test_final.b");
+    state.register_function("window_create", window_create_bf);
     while state.progchar() != '\0' {
         state.execute();
     }
