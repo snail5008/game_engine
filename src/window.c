@@ -41,9 +41,10 @@ void glfw_mousepos_callback(GLFWwindow *glfw_window, double x, double y) {
 }
 
 void glfw_windowsize_callback(GLFWwindow *glfw_window, int width, int height) {
+    window.width = width;
+    window.height = height;
     (void)glfw_window;
-    while ((uint32_t)(glfwGetTime() * 10000) % 100 != 0) {}
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, window.width, window.height);
 }
 
 void glfw_mousebutton_callback(GLFWwindow *glfw_window, int button, int action, int mods) {

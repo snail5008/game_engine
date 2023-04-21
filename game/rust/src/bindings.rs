@@ -8,6 +8,7 @@ pub mod engine {
         fn engine_sum_u32(vector: *const u32, vector_element_count: u32) -> u32;
         pub fn free(ptr: *mut c_void);
         pub fn malloc(size: usize) -> *mut c_void;
+        fn glfwGetTime() -> f64;
     }
     pub fn sum_u32(vector: &[u32]) -> u32 {
         unsafe { engine_sum_u32(vector.as_ptr(), vector.len() as u32) }
@@ -33,6 +34,9 @@ pub mod engine {
         unsafe { free(c_filename as *mut c_void); }
         cstr_to_rust(contents)
     }
+    pub fn time() -> f32 {
+        unsafe { glfwGetTime() as f32 }
+    }
 }
 
 pub mod window {
@@ -40,6 +44,8 @@ pub mod window {
         fn window_open() -> bool;
         fn window_frame_begin();
         fn window_frame_end();
+        fn window_width() -> u32;
+        fn window_height() -> u32;
     }
 
     pub fn open() -> bool {
@@ -53,6 +59,14 @@ pub mod window {
     pub fn frame_end() {
         unsafe { window_frame_end() }
     }
+
+    pub fn width() -> f32 {
+        unsafe { window_width() as f32 }
+    }
+
+    pub fn height() -> f32 {
+        unsafe { window_height() as f32 }
+    }
 }
 
 pub mod mesh {
@@ -63,12 +77,12 @@ pub mod mesh {
     extern "C" {
         fn renderer_mesh_create(vertices: *const f32, vertex_count: u32, layout_location_count: u32, vertex_layout: *const u32, vertex_shader_path: *const u8, fragment_shader_path: *const u8) -> *mut c_void;
         fn renderer_mesh_destroy(mesh: *mut c_void);
-        fn renderer_mesh_draw(mesh: *mut c_void, model: *const f32);
+        fn renderer_mesh_draw(mesh: *mut c_void, model: *const f32, view: *const f32, projection: *const f32);
     }
 
     pub struct Mesh {
         mesh: *mut c_void,
-        model: Matrix4x4
+        model: Matrix4x4,
     }
 
     impl Mesh {
@@ -79,14 +93,14 @@ pub mod mesh {
             fragment_shader_path.push('\0');
             Mesh {
                 mesh: unsafe { renderer_mesh_create(vertices.as_ptr(), vertices.len() as u32 / engine::sum_u32(&vertex_layout), vertex_layout.len() as u32, vertex_layout.as_ptr(), vertex_shader_path.as_ptr(), fragment_shader_path.as_ptr()) },
-                model: Matrix4x4::identity(),
+                model: Matrix4x4::identity()
             }
         }
         pub fn delete(&self) {
             unsafe { renderer_mesh_destroy(self.mesh); }
         }
-        pub fn draw(&self) {
-            unsafe { renderer_mesh_draw(self.mesh, self.model.as_ptr()); }
+        pub fn draw(&self, cam: &crate::camera::Camera) {
+            unsafe { renderer_mesh_draw(self.mesh, self.model.as_ptr(), cam.view().as_ptr(), cam.projection().as_ptr()); }
         }
         pub fn model(&mut self) -> &mut Matrix4x4 {
             &mut self.model

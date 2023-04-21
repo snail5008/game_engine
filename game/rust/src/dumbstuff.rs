@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 pub mod brainfuck {
     pub struct State {
         current_cell: usize,
@@ -163,9 +165,5 @@ pub mod brainfuck {
             unsafe { *self.cells.as_mut_ptr().add(index + 7) = *((&value as *const u64 as *const u8).add(7)) };
         }
     }
-}
-
-mod aaascript {
-
 }
 

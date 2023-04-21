@@ -104,9 +104,15 @@ void renderer_mesh_destroy(void *mesh) {
     free(mesh);
 }
 
-void renderer_mesh_draw(void *mesh, float *model) {
+void renderer_mesh_draw(void *mesh, float *model, float *view, float *projection) {
     if (model != NULL) {
         renderer_update_model_matrix(mesh, model);
+    }
+    if (view != NULL) {
+        renderer_update_view_matrix(mesh, view);
+    }
+    if (projection != NULL) {
+        renderer_update_projection_matrix(mesh, projection);
     }
 
     glBindVertexArray(to_mesh(mesh)->vao);
@@ -117,6 +123,14 @@ void renderer_mesh_draw(void *mesh, float *model) {
 void renderer_update_model_matrix(void *mesh, float *matrix) {
     glUseProgram(to_mesh(mesh)->prog);
     glUniformMatrix4fv(glGetUniformLocation(to_mesh(mesh)->prog, "model"), 1, GL_FALSE, matrix);
+}
+void renderer_update_projection_matrix(void *mesh, float *matrix) {
+    glUseProgram(to_mesh(mesh)->prog);
+    glUniformMatrix4fv(glGetUniformLocation(to_mesh(mesh)->prog, "projection"), 1, GL_FALSE, matrix);
+}
+void renderer_update_view_matrix(void *mesh, float *matrix) {
+    glUseProgram(to_mesh(mesh)->prog);
+    glUniformMatrix4fv(glGetUniformLocation(to_mesh(mesh)->prog, "view"), 1, GL_FALSE, matrix);
 }
 
 

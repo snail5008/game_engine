@@ -9,8 +9,10 @@
 
 void *renderer_mesh_create(const float *vertices, uint32_t vertex_count, uint32_t layout_location_count, const uint32_t vertex_layout[32], const char *vertex_shader_path, char *fragment_shader_path);
 void renderer_mesh_destroy(void *mesh);
-void renderer_mesh_draw(void *mesh, float *model);
+void renderer_mesh_draw(void *mesh, float *model, float *view, float *projection);
 void renderer_update_model_matrix(void *mesh, float *matrix);
+void renderer_update_projection_matrix(void *mesh, float *matrix);
+void renderer_update_view_matrix(void *mesh, float *matrix);
 
 // future, allow delete opengl obj, replace with new one
 uint32_t renderer_mesh_get_vao(void *mesh);
