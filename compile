@@ -6,6 +6,7 @@
 
 ### different game languages ###
 # clang -std=c11 -shared -fPIC -o libgame.so game/C/main.c -Wall -Wextra -O3 -std=c99
+python3 bf_macros.py test.b > test_final.b
 (cd game/rust && cargo build && cp target/debug/librust.so ../../libgame.so)
 
 clang -std=c11 src/*.c glad.o -o engine -Wall -Wextra -Iglad/include -L. -lglfw -lgame -O3 -Wl,-rpath='$ORIGIN'

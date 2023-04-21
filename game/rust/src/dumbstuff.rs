@@ -1,7 +1,7 @@
 
 // For functions:
 //                            (in hex, little endian)
-//                            20 03 00 00 58 20 00 00 .... 
+//                            20 03 00 00 58 02 00 00 .... 
 //      Function in memory:   800 600 hello!\0 window_create%0000 0400 0800%
 //      to call the function, have the current cell be the value with the 'w' in window_create
 
@@ -12,6 +12,7 @@ pub mod brainfuck {
         cells: Vec<u8>,
         program: &'static str,
         opening_brackets: Vec<usize>,
+        function_table: Vec<(&'static str, fn())>
     }
 
     impl State {
@@ -22,6 +23,7 @@ pub mod brainfuck {
                 cells: vec![0; 1024],
                 program: crate::bindings::engine::read_file(program),
                 opening_brackets: vec![],
+                function_table: vec![]
             }
         }
         pub fn delete(&self) {
@@ -40,7 +42,7 @@ pub mod brainfuck {
             self.cells[self.current_cell] = self.cells[self.current_cell].wrapping_sub(1);
         }
         pub fn print_cell(&mut self) {
-            println!("{} ({})", self.cells[self.current_cell] as char, self.cells[self.current_cell])
+            println!("{}", self.cells[self.current_cell] as char)
         }
         pub fn opening_bracket(&mut self) {
             self.opening_brackets.push(self.program_char);
@@ -63,6 +65,21 @@ pub mod brainfuck {
         pub fn next_progchar(&mut self) {
             self.program_char += 1
         }
+        pub fn get_cell(&self, cell: usize) -> u8 {
+            self.cells[cell]
+        }
+        pub fn call_function(&self) {
+            let mut function_name = String::from("");
+            let mut i = self.current_cell;
+            while self.cells[i] != '%' as u8 {
+                function_name.push(self.cells[i] as char);
+                i += 1;
+            }
+            println!("{}", function_name);
+        }
+        pub fn cell_count(&self) -> usize {
+            self.cells.len()
+        }
         pub fn execute(&mut self) {
             match self.progchar() {
                 '>' => self.next_cell(),
@@ -72,6 +89,7 @@ pub mod brainfuck {
                 '.' => self.print_cell(),
                 '[' => self.opening_bracket(),
                 ']' => self.closing_bracket(),
+                '%' => self.call_function(),
                 _   => {}
             }
             self.next_progchar();
