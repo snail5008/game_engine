@@ -5,7 +5,7 @@ pub mod brainfuck {
         cells: Vec<u8>,
         program: &'static str,
         opening_brackets: Vec<usize>,
-        function_table: Vec<(&'static str, fn(state: &State, arguments: *const u8))>
+        function_table: Vec<(&'static str, fn(state: &mut State, arguments: *const u8))>
     }
 
     impl State {
@@ -61,7 +61,7 @@ pub mod brainfuck {
         pub fn get_cell(&self, cell: usize) -> u8 {
             self.cells[cell]
         }
-        pub fn call_function(&self) {
+        pub fn call_function(&mut self) {
             let mut function_name = String::from("");
             let mut i = self.current_cell;
             while self.cells[i] != '%' as u8 {
@@ -86,7 +86,7 @@ pub mod brainfuck {
                 }
             }
         }
-        pub fn register_function(&mut self, name: &'static str, ptr: fn(state: &State, arguments: *const u8)) {
+        pub fn register_function(&mut self, name: &'static str, ptr: fn(state: &mut State, arguments: *const u8)) {
             self.function_table.push((name, ptr));
         }
         pub fn cell_count(&self) -> usize {
@@ -125,6 +125,19 @@ pub mod brainfuck {
             retval
         }
 
+        pub fn u64_from_idx(&self, index: usize) -> u32 {
+            let mut retval: u32 = 0;
+            unsafe { *(&mut retval as *mut u32 as *mut u8) = self.get_cell(index); }
+            unsafe { *(&mut retval as *mut u32 as *mut u8).add(1) = self.get_cell(index + 1); }
+            unsafe { *(&mut retval as *mut u32 as *mut u8).add(2) = self.get_cell(index + 2); }
+            unsafe { *(&mut retval as *mut u32 as *mut u8).add(3) = self.get_cell(index + 3); }
+            unsafe { *(&mut retval as *mut u32 as *mut u8).add(4) = self.get_cell(index + 4); }
+            unsafe { *(&mut retval as *mut u32 as *mut u8).add(5) = self.get_cell(index + 5); }
+            unsafe { *(&mut retval as *mut u32 as *mut u8).add(6) = self.get_cell(index + 6); }
+            unsafe { *(&mut retval as *mut u32 as *mut u8).add(7) = self.get_cell(index + 7); }
+            retval
+        }
+
         pub fn get_string(&self, index: usize) -> String {
             let mut string = String::from("");
             let mut i = index;
@@ -133,6 +146,21 @@ pub mod brainfuck {
                 i += 1
             }
             string
+        }
+
+        pub fn set_cell(&mut self, index: usize, value: u8) {
+            self.cells[index] = value;
+        }
+
+        pub fn set_cell_u64(&mut self, index: usize, value: u64) {
+            unsafe { *self.cells.as_mut_ptr().add(index) = *(&value as *const u64 as *const u8) };
+            unsafe { *self.cells.as_mut_ptr().add(index + 1) = *((&value as *const u64 as *const u8).add(1)) };
+            unsafe { *self.cells.as_mut_ptr().add(index + 2) = *((&value as *const u64 as *const u8).add(2)) };
+            unsafe { *self.cells.as_mut_ptr().add(index + 3) = *((&value as *const u64 as *const u8).add(3)) };
+            unsafe { *self.cells.as_mut_ptr().add(index + 4) = *((&value as *const u64 as *const u8).add(4)) };
+            unsafe { *self.cells.as_mut_ptr().add(index + 5) = *((&value as *const u64 as *const u8).add(5)) };
+            unsafe { *self.cells.as_mut_ptr().add(index + 6) = *((&value as *const u64 as *const u8).add(6)) };
+            unsafe { *self.cells.as_mut_ptr().add(index + 7) = *((&value as *const u64 as *const u8).add(7)) };
         }
     }
 }

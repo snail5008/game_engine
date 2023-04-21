@@ -6,10 +6,10 @@ mod matrices;
 mod dumbstuff;
 
 extern "C" {
-    pub fn window_create(width: u32, height: u32, title: *const u8) -> *const std::ffi::c_void;
+    pub fn window_create(width: u32, height: u32, title: *const u8);
 }
 
-fn window_create_bf(s: &dumbstuff::brainfuck::State, args: *const u8) {
+fn window_create_bf(s: &mut dumbstuff::brainfuck::State, args: *const u8) {
     let arguments = dumbstuff::brainfuck::State::arguments(args, 3);
     let width: u32 = s.u32_from_idx(arguments[0] as usize);
     let height: u32 = s.u32_from_idx(arguments[1] as usize);

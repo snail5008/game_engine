@@ -11,7 +11,7 @@
 Game
 ~Game%
 
-Window creation
+Window creation, read indices 0 (w), 4 (h), and 8 (t)
 ~window_create%
 >>>>
 ~&+4
