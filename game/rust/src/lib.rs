@@ -1,9 +1,16 @@
 mod bindings;
 use bindings::{window, mesh::Mesh};
 mod matrices;
+mod dumbstuff;
 
 #[no_mangle]
 extern "C" fn game_main() {
+
+    let mut state = dumbstuff::brainfuck::State::new("test.b");
+    while state.progchar() != '\0' {
+        state.execute();
+    }
+    state.delete();
 
     let vertices: [f32; 18] = [
         0.0, 0.5, 0.0,    1.0, 0.0, 0.0,

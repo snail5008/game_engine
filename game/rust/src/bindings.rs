@@ -1,16 +1,37 @@
 #![allow(dead_code)]
 
 pub mod engine {
+    use std::ffi::c_void;
+
     extern "C" {
         fn engine_read_file(filename: *const u8) -> *mut u8;
         fn engine_sum_u32(vector: *const u32, vector_element_count: u32) -> u32;
+        pub fn free(ptr: *mut c_void);
+        pub fn malloc(size: usize) -> *mut c_void;
     }
     pub fn sum_u32(vector: &[u32]) -> u32 {
         unsafe { engine_sum_u32(vector.as_ptr(), vector.len() as u32) }
     }
+    pub fn cstr_to_rust(string: *const u8) -> &'static str {
+        unsafe { std::ffi::CStr::from_ptr(string as *const i8) }.to_str().unwrap()
+    }
+    // needs to be freed!
+    pub fn ruststr_to_c(string: &str) -> *mut u8 {
+        let c_str: *mut u8 = unsafe { malloc(string.len() + 1) } as *mut u8;
+        let mut i = 0;
+        while i < string.len() {
+            unsafe { *c_str.add(i) = string.as_bytes()[i] as u8 };
+            i += 1
+        }
+        unsafe { *(c_str.add(i)) = 0 };
+        c_str
+    }
+    // needs to be freed!
     pub fn read_file(filename: &str) -> &str {
-        let contents: *const u8 = unsafe { engine_read_file(filename.as_ptr()) };
-        unsafe { std::ffi::CStr::from_ptr(contents as *const i8) }.to_str().unwrap()
+        let c_filename = ruststr_to_c(filename);
+        let contents: *const u8 = unsafe { engine_read_file(c_filename) };
+        unsafe { free(c_filename as *mut c_void); }
+        cstr_to_rust(contents)
     }
 }
 
