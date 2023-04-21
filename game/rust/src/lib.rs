@@ -21,7 +21,7 @@ fn window_create_bf(s: &mut dumbstuff::brainfuck::State, args: *const u8) {
 #[no_mangle]
 extern "C" fn game_main() {
 
-    let mut state = dumbstuff::brainfuck::State::new("test_final.b");
+    let mut state = dumbstuff::brainfuck::State::new("game/rust/test_final.txt");
     state.register_function("window_create", window_create_bf);
     while state.progchar() != '\0' {
         state.execute();
