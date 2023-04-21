@@ -164,3 +164,8 @@ pub mod brainfuck {
         }
     }
 }
+
+mod aaascript {
+
+}
+
