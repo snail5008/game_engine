@@ -5,6 +5,7 @@ mod camera;
 mod transform;
 use std::f32::consts::PI;
 use bindings::window;
+use matrices::Matrix4x4;
 
 extern "C" {
     pub fn window_create(width: u32, height: u32, title: *const u8);
@@ -62,7 +63,12 @@ extern "C" fn game_main() {
 
     cam.mut_transform().translate((0.0, 0.0, -3.0));
     mesh.mut_transform().translate((0.0, 1.0, 0.0));
+
+    let mat1 = Matrix4x4::new([1.0, 43.0, 1.0, 1.0, 1.0, 1.0, 1.0, 4.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]);
+    let mat2 = Matrix4x4::new([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0]);
     
+    dbg!(mat1.mul(&mat2));
+
     while window::open() {
         mesh.mut_transform().translate(((bindings::engine::time() * 10.0).sin() / 10.0, 0.0, 0.0));
 

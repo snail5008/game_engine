@@ -28,6 +28,10 @@ impl Matrix4x4 {
         }
     }
 
+    pub fn new(data: [f32; 16]) -> Self {
+        Matrix4x4 { data }
+    }
+
     // idk how this works, but it does
     pub fn perspective(fovy: f32, aspect: f32, near: f32, far: f32) -> Self {
         let f: f32 = 1.0 / (fovy / 2.0).tan();
@@ -68,6 +72,16 @@ impl Matrix4x4 {
         self.data[12] += x;
         self.data[13] += y;
         self.data[14] += z;
+    }
+
+    pub fn mul(&self, rhs: &Self) -> Self {
+        let mut matrix = Self::zero();
+        for i in 0..4 {
+            for j in 0..4 {
+                matrix.mut_data()[i * 4 + j] = self.data()[i * 4] * rhs.data()[j] + self.data()[i * 4 + 1] * rhs.data()[j + 4] + self.data[i * 4 + 2] * rhs.data()[j + 8] + self.data()[i * 4 + 3] * rhs.data()[j + 12];
+            }
+        }
+        matrix
     }
 
     // pub fn rotate(&mut self, x: f32, y: f32, z: f32) {
