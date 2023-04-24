@@ -115,6 +115,8 @@ void window_create(uint32_t width, uint32_t height, const char *title) {
     glfwSetScrollCallback(window.window, glfw_scrollwheel_callback);
     glfwSetWindowSizeCallback(window.window, glfw_windowsize_callback);
 
+    glEnable(GL_DEPTH_TEST);
+
     window.mouse_position.x = 0;
     window.mouse_position.y = 0;
     window.mouse_wheel = 0;
@@ -140,7 +142,7 @@ bool window_open(void) {
 
 void window_frame_begin(void) {
     glClearColor(window.bg_colour.r, window.bg_colour.g, window.bg_colour.b, 0.0);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void window_frame_end(void) {

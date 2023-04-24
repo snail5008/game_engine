@@ -102,8 +102,11 @@ pub mod mesh {
         pub fn draw(&self, cam: &crate::camera::Camera) {
             unsafe { renderer_mesh_draw(self.mesh, self.model.as_ptr(), cam.view().as_ptr(), cam.projection().as_ptr()); }
         }
-        pub fn model(&mut self) -> &mut Matrix4x4 {
+        pub fn model_mut(&mut self) -> &mut Matrix4x4 {
             &mut self.model
+        }
+        pub fn model(&self) -> &Matrix4x4 {
+            &self.model
         }
     }
 }

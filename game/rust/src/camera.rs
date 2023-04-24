@@ -34,6 +34,10 @@ impl Camera {
         &self.view
     }
 
+    pub fn projection_mut(&mut self) -> &mut crate::matrices::Matrix4x4 {
+        &mut self.projection
+    }
+
     pub fn projection(&self) -> &crate::matrices::Matrix4x4 {
         &self.projection
     }
