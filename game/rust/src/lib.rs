@@ -2,6 +2,7 @@ mod bindings;
 mod matrices;
 mod scripting;
 mod camera;
+mod transform;
 use std::f32::consts::PI;
 use bindings::window;
 
@@ -59,10 +60,12 @@ extern "C" fn game_main() {
     let mut cam = camera::Camera::new(PI / 4.0, 800.0, 600.0);
     let mut mesh = bindings::mesh::Mesh::new(&vertices, &[3, 3], "shaders/default.vert", "shaders/default.frag");
 
-    cam.view_mut().translate(0.0, 0.0, -3.0);
-    mesh.model_mut().translate(0.0, 1.0, 0.0);
+    cam.mut_transform().translate((0.0, 0.0, -3.0));
+    mesh.mut_transform().translate((0.0, 1.0, 0.0));
     
     while window::open() {
+        mesh.mut_transform().translate(((bindings::engine::time() * 10.0).sin() / 10.0, 0.0, 0.0));
+
         window::frame_begin();
 
         cam.update_winsize(window::width(), window::height());

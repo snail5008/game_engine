@@ -72,7 +72,7 @@ pub mod window {
 pub mod mesh {
     use std::ffi::c_void;
     use crate::bindings::engine;
-    use crate::matrices::Matrix4x4;
+    use crate::transform::Transform;
 
     extern "C" {
         fn renderer_mesh_create(vertices: *const f32, vertex_count: u32, layout_location_count: u32, vertex_layout: *const u32, vertex_shader_path: *const u8, fragment_shader_path: *const u8) -> *mut c_void;
@@ -82,7 +82,7 @@ pub mod mesh {
 
     pub struct Mesh {
         mesh: *mut c_void,
-        model: Matrix4x4,
+        transform: Transform
     }
 
     impl Mesh {
@@ -93,20 +93,27 @@ pub mod mesh {
             fragment_shader_path.push('\0');
             Mesh {
                 mesh: unsafe { renderer_mesh_create(vertices.as_ptr(), vertices.len() as u32 / engine::sum_u32(&vertex_layout), vertex_layout.len() as u32, vertex_layout.as_ptr(), vertex_shader_path.as_ptr(), fragment_shader_path.as_ptr()) },
-                model: Matrix4x4::identity()
+                transform: Transform::new()
             }
         }
         pub fn delete(&self) {
             unsafe { renderer_mesh_destroy(self.mesh); }
         }
-        pub fn draw(&self, cam: &crate::camera::Camera) {
-            unsafe { renderer_mesh_draw(self.mesh, self.model.as_ptr(), cam.view().as_ptr(), cam.projection().as_ptr()); }
+        pub fn draw(&mut self, cam: &crate::camera::Camera) {
+            unsafe { renderer_mesh_draw(self.mesh, self.transform.generate_matrix().as_ptr(), cam.transform().generate_matrix().as_ptr(), cam.projection().as_ptr()); }
         }
-        pub fn model_mut(&mut self) -> &mut Matrix4x4 {
-            &mut self.model
+        pub fn mut_transform(&mut self) -> &mut Transform {
+            &mut self.transform
         }
-        pub fn model(&self) -> &Matrix4x4 {
-            &self.model
+        pub fn transform(&self) -> &Transform {
+            &self.transform
         }
+        // pub fn translate(&mut self, x: f32, y: f32, z: f32) {
+        //     self.translation.
+        // }
+        // pub fn model(&self) -> &Matrix4x4 {
+        //     self.model.set(&);
+        //     &self.model
+        // }
     }
 }

@@ -48,6 +48,14 @@ impl Matrix4x4 {
         }
     }
     
+    pub fn data(&self) -> &[f32; 16] {
+        &self.data
+    }
+
+    pub fn mut_data(&mut self) -> &mut [f32; 16] {
+        &mut self.data
+    }
+    
     pub fn as_ptr(&self) -> *const f32 {
         self.data.as_ptr()
     }
@@ -61,6 +69,12 @@ impl Matrix4x4 {
         self.data[13] += y;
         self.data[14] += z;
     }
+
+    // pub fn rotate(&mut self, x: f32, y: f32, z: f32) {
+    //     self.data[12] += x;
+    //     self.data[13] += y;
+    //     self.data[14] += z;
+    // }
 
     pub fn set(&mut self, rhs: &Self) {
         for i in 0..16 {
