@@ -62,15 +62,14 @@ extern "C" fn game_main() {
     let mut mesh = bindings::mesh::Mesh::new(&vertices, &[3, 3], "shaders/default.vert", "shaders/default.frag");
 
     cam.mut_transform().translate((0.0, 0.0, -3.0));
-    mesh.mut_transform().translate((0.0, 1.0, 0.0));
 
-    let mat1 = Matrix4x4::new([1.0, 43.0, 1.0, 1.0, 1.0, 1.0, 1.0, 4.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]);
-    let mat2 = Matrix4x4::new([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0]);
-    
-    dbg!(mat1.mul(&mat2));
+    mesh.mut_transform().translate((0.0, 0.5, 0.0));
+    mesh.mut_transform().set_scale((0.5, 0.5, 0.5));
 
     while window::open() {
-        mesh.mut_transform().translate(((bindings::engine::time() * 10.0).sin() / 10.0, 0.0, 0.0));
+        mesh.mut_transform().scale(((bindings::engine::time() * 10.0).sin() / 10.0, (bindings::engine::time() * 10.0).cos() / 50.0, (bindings::engine::time() * 10.0).cos() / 50.0));
+        // let a = (bindings::engine::time() / 100.0).sin();
+        mesh.mut_transform().rotate((0.01, 0.01, 0.01));
 
         window::frame_begin();
 
