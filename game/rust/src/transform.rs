@@ -84,4 +84,7 @@ impl Transform {
         self.rotation.1 += by.1;
         self.rotation.2 += by.2;
     }
+    pub fn set_rotation(&mut self, rotation: (f32, f32, f32)) {
+        self.rotation = rotation;
+    }
 }
