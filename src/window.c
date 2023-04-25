@@ -109,7 +109,7 @@ void window_create(uint32_t width, uint32_t height, const char *title) {
         exit(1);
     }
 
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
     glfwSetCursorPosCallback(window.window, glfw_mousepos_callback);
     glfwSetMouseButtonCallback(window.window, glfw_mousebutton_callback);
     glfwSetScrollCallback(window.window, glfw_scrollwheel_callback);

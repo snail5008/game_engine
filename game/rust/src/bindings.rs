@@ -78,11 +78,14 @@ pub mod mesh {
         fn renderer_mesh_create(vertices: *const f32, vertex_count: u32, layout_location_count: u32, vertex_layout: *const u32, vertex_shader_path: *const u8, fragment_shader_path: *const u8) -> *mut c_void;
         fn renderer_mesh_destroy(mesh: *mut c_void);
         fn renderer_mesh_draw(mesh: *mut c_void, model: *const f32, view: *const f32, projection: *const f32);
+        fn glUniform1f(uniform_location: i32, v: f32);
+        fn glUniform3f(uniform_location: i32, v1: f32, v2: f32, v3: f32);
     }
 
     pub struct Mesh {
         mesh: *mut c_void,
-        transform: Transform
+        transform: Transform,
+        lighting: bool
     }
 
     impl Mesh {
@@ -93,7 +96,8 @@ pub mod mesh {
             fragment_shader_path.push('\0');
             Mesh {
                 mesh: unsafe { renderer_mesh_create(vertices.as_ptr(), vertices.len() as u32 / engine::sum_u32(&vertex_layout), vertex_layout.len() as u32, vertex_layout.as_ptr(), vertex_shader_path.as_ptr(), fragment_shader_path.as_ptr()) },
-                transform: Transform::new()
+                transform: Transform::new(),
+                lighting: false
             }
         }
         pub fn delete(&self) {
@@ -107,6 +111,9 @@ pub mod mesh {
         }
         pub fn transform(&self) -> &Transform {
             &self.transform
+        }
+        pub fn lighting(&mut self, state: bool) {
+            self.lighting = state;
         }
         // pub fn translate(&mut self, x: f32, y: f32, z: f32) {
         //     self.translation.
