@@ -21,6 +21,8 @@ typedef struct {
     Vec2f32 mouse_accel;
     mouse_buttons_t mouse_buttons;
     float mouse_wheel;
+    double frame_start_time;
+    double frame_time;
 } Window;
 
 static Window window = {
@@ -107,9 +109,10 @@ void window_create(uint32_t width, uint32_t height, const char *title) {
     if (!gladLoadGL()) {
         fprintf(stderr, "Error: could not load OpenGL\n");
         exit(1);
+        //4.5
     }
 
-    glfwSwapInterval(0);
+    glfwSwapInterval(1);
     glfwSetCursorPosCallback(window.window, glfw_mousepos_callback);
     glfwSetMouseButtonCallback(window.window, glfw_mousebutton_callback);
     glfwSetScrollCallback(window.window, glfw_scrollwheel_callback);
@@ -141,11 +144,15 @@ bool window_open(void) {
 }
 
 void window_frame_begin(void) {
+    window.frame_start_time = glfwGetTime();
+
     glClearColor(window.bg_colour.r, window.bg_colour.g, window.bg_colour.b, 0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void window_frame_end(void) {
+    window.frame_time = glfwGetTime() - window.frame_start_time;
+
     window.mouse_wheel = 0;
     window.mouse_accel.x = 0;
     window.mouse_accel.y = 0;
@@ -207,4 +214,8 @@ mouse_buttons_t window_mouse_buttons(void) {
 
 float window_scroll_wheel_direction(void) {
     return window.mouse_wheel;
+}
+
+double window_frametime(void) {
+    return window.frame_time;
 }

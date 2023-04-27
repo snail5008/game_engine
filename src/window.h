@@ -25,3 +25,4 @@ void window_set_height(uint32_t height);
 void window_set_title(const char *title);
 mouse_buttons_t window_mouse_buttons(void);
 float window_scroll_wheel_direction(void);
+double window_frametime(void);
